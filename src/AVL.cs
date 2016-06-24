@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NASP_Labos1
+﻿namespace NASP_Labos1
 {
     public class AVL
     {

@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
@@ -17,10 +12,11 @@ namespace NASP_Labos1
         {
             InitializeComponent();
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            //tree = new AVL();
-            //tree.root = null;
+            tree = new AVL();
+            tree.root = null;
         }
 
         private void browse_Click(object sender, EventArgs e)
@@ -47,7 +43,13 @@ namespace NASP_Labos1
                 }
                 reader.Close();
             }
-            printTree(tree.root, 10);
+            printTree(tree.root);
+        }
+
+        private void printTree(AVL.Node root)
+        {
+            textBox1.Text = "";
+            printTree(tree.root, 0);
         }
 
         private void printTree(AVL.Node root, int space)
@@ -59,31 +61,43 @@ namespace NASP_Labos1
             }
             else
             {
-                for (int i = 0; i < space; i++)
-                    textBox1.Text += "          ";
-                textBox1.Text += root.value.ToString()+"\r\n";
+                printTree(root.Left, space + 1);
+                textBox1.Text += new string('\t', space) + root.value + "\r\n";
+                printTree(root.Right, space + 1);
             }
-            printTree(root.Right, space+2);
-            printTree(root.Left, space-2);
+        }
+
+        private bool TryGetNumberAndClear(TextBox textBox, out int number)
+        {
+            number = 0;
+
+            if (string.IsNullOrWhiteSpace(textBox.Text)) return false;
+
+            if (!int.TryParse(textBox.Text, out number))
+                return false;
+
+            addTextbox.Text = "";
+
+            return true;
         }
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            if (addTextbox.Text.Length != 0)
+            int number;
+            if (TryGetNumberAndClear(addTextbox, out number))
             {
-                tree.root = tree.insert(Convert.ToInt32(addTextbox.Text), tree.root);
-                textBox1.Text = "";
-                printTree(tree.root, 10);
+                tree.root = tree.insert(number, tree.root);
+                printTree(tree.root);
             }
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            if (delTextBox.Text.Length != 0)
+            int number;
+            if (TryGetNumberAndClear(delTextBox, out number))
             {
-                tree.root = tree.delete(Convert.ToInt32(delTextBox.Text), ref tree.root);
-                textBox1.Text = "";
-                printTree(tree.root, 10);
+                tree.root = tree.delete(number, ref tree.root);
+                printTree(tree.root);
             }
         }
     }
