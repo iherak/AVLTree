@@ -76,7 +76,7 @@ namespace NASP_Labos1
             if (!int.TryParse(textBox.Text, out number))
                 return false;
 
-            addTextbox.Text = "";
+            textBox.Text = "";
 
             return true;
         }
